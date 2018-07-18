@@ -1,0 +1,10 @@
+{
+  "name": "test-esy-npm",
+  "version": "1.0.0",
+  "dependencies": {
+    "rimraf": "*"
+  },
+  "devDependencies": {
+    "prettier": "^1.13.7"
+  }
+}
