@@ -20,6 +20,24 @@ const cases = [
       require('webpack');
     `
   },
+  {
+    name: "jest-cli",
+    test: `
+      require('jest-cli');
+    `
+  },
+  {
+    name: "flow-bin",
+    test: `
+      require('flow-bin');
+    `
+  },
+  {
+    name: "babel-cli",
+    test: `
+      require('babel-core');
+    `
+  },
 ];
 
 const child_process = require('child_process');
