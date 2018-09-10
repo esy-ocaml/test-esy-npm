@@ -37,37 +37,34 @@ const cases = [
     test: `
       require('babel-core');
     `
-  },
+  }
 ];
 
-const child_process = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const rmSync = require('rimraf').sync;
+const child_process = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const rmSync = require("rimraf").sync;
 
-const ESYI = process.env.ESYI || 'esyi';
-const ESY = process.env.ESY || 'esy';
+const ESY = process.env.ESY || "esy";
 
-child_process.execSync(`which ${ESYI}`, {stdio: 'inherit'});
-child_process.execSync(`which ${ESY}`, {stdio: 'inherit'});
+child_process.execSync(`which ${ESY}`, { stdio: "inherit" });
 
 const cwd = __dirname;
 
-rmSync(path.join(cwd, '_build'));
-fs.mkdirSync(path.join(cwd, '_build'));
+rmSync(path.join(cwd, "_build"));
+fs.mkdirSync(path.join(cwd, "_build"));
 
 let reposUpdated = false;
 
 for (let c of cases) {
-
   console.log(`*** Testing ${c.name}`);
 
-  const sandboxPath = path.join(cwd, '_build', c.name);
+  const sandboxPath = path.join(cwd, "_build", c.name);
 
   const packageJson = {
     name: `test-${c.name}`,
-    version: '0.0.0',
-    esy: {build: ['true']},
+    version: "0.0.0",
+    esy: { build: ["true"] },
     dependencies: {
       [c.name]: "*"
     }
@@ -75,33 +72,29 @@ for (let c of cases) {
 
   fs.mkdirSync(sandboxPath);
   fs.writeFileSync(
-    path.join(sandboxPath, 'package.json'),
+    path.join(sandboxPath, "package.json"),
     JSON.stringify(packageJson, null, 2)
   );
 
   child_process.execSync(`${ESY} install`, {
     cwd: sandboxPath,
-    stdio: 'inherit',
+    stdio: "inherit"
   });
 
   child_process.execSync(`${ESY} build`, {
     cwd: sandboxPath,
-    stdio: 'inherit',
+    stdio: "inherit"
   });
 
   if (c.test != null) {
-    fs.writeFileSync(
-      path.join(sandboxPath, 'test.js'),
-      c.test
-    );
-  console.log(`*** Running test ***`);
+    fs.writeFileSync(path.join(sandboxPath, "test.js"), c.test);
+    console.log(`*** Running test ***`);
     child_process.execSync(`node ./test.js`, {
       cwd: sandboxPath,
-      stdio: 'inherit',
+      stdio: "inherit"
     });
   }
 
   console.log(`*** OK ***`);
   rmSync(sandboxPath);
-
 }
